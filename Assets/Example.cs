@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using Store;
+using IOSStore;
 using UnityEngine.UI;
 
 public class Example : MonoBehaviour, IStoreDelegate
@@ -16,7 +16,7 @@ public class Example : MonoBehaviour, IStoreDelegate
     public Button m_BtnRestore;
 
 
-    IStore store = null;
+    I_IOSStore m_IosStore = null;
 	/// <summary>
 	/// Setup store.
 	/// </summary>
@@ -27,7 +27,7 @@ public class Example : MonoBehaviour, IStoreDelegate
 
     private void Start()
     {
-        store  = StoreKit.Instance;
+        m_IosStore  = StoreKit.Instance;
 
         m_BtnRequestProductData = this.transform.Find("BtnRequestProductData").GetComponent<Button>();
         m_BtnRequestProductData.onClick.AddListener(RequestProductData);
@@ -42,25 +42,25 @@ public class Example : MonoBehaviour, IStoreDelegate
     private void RequestProductData()
     {
         Debug.Log("RequestProductData");
-        if (!store.IsAvailable)
+        if (!m_IosStore.IsAvailable)
             return;
-        store.Request(new [] { m_CurProductID });
+        m_IosStore.Request(new [] { m_CurProductID });
     }
 
     private void PurchaseProduct()
     {
         Debug.Log("PurchaseProduct");
-        if (!store.IsAvailable)
+        if (!m_IosStore.IsAvailable)
             return;
-        store.Purchase(m_CurProductID);
+        m_IosStore.Purchase(m_CurProductID);
     }
 
     private void Restore()
     {
         Debug.Log("Restore");
-        if (!store.IsAvailable)
+        if (!m_IosStore.IsAvailable)
             return;
-        store.Restore();
+        m_IosStore.Restore();
     }
 
 	/// <summary>
