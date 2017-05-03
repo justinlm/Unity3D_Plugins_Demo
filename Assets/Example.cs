@@ -2,14 +2,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using Store;
+using UnityEngine.UI;
 
 public class Example : MonoBehaviour, IStoreDelegate
 {
 	/// <summary>
 	/// Fullgame identifier.
 	/// </summary>
-	private const string m_FullgameUnlockID = "com.game.fullgame";
+	private string m_CurProductID = "PID00000ID1";
 
+    public Button m_BtnRequestProductData;
+    public Button m_BtnPurchaseProduct;
+    public Button m_BtnRestore;
+
+
+    IStore store = null;
 	/// <summary>
 	/// Setup store.
 	/// </summary>
@@ -18,38 +25,43 @@ public class Example : MonoBehaviour, IStoreDelegate
 		StoreKit.Instance.Delegate = this;
 	}
 
-	/// <summary>
-	/// Draw GUI.
-	/// </summary>
-	private void OnGUI()
-	{
-		IStore store = StoreKit.Instance;
+    private void Start()
+    {
+        store  = StoreKit.Instance;
 
-		// In App Purchases can been disabled in iOS settings.
-		if (!store.IsAvailable)
-			return;
+        m_BtnRequestProductData = this.transform.Find("BtnRequestProductData").GetComponent<Button>();
+        m_BtnRequestProductData.onClick.AddListener(RequestProductData);
 
-		Rect position = new Rect(Screen.width * 0.5f - 90f, 100f, 180f, 45f);
+        m_BtnPurchaseProduct = this.transform.Find("BtnPurchaseProduct").GetComponent<Button>();
+        m_BtnPurchaseProduct.onClick.AddListener(PurchaseProduct);
 
-		if (GUI.Button(position, "Request data"))
-		{
-			store.Request(new [] { m_FullgameUnlockID });
-		}
+        m_BtnRestore = this.transform.Find("BtnRestore").GetComponent<Button>();
+        m_BtnRestore.onClick.AddListener(Restore);
+    }
 
-		position.y += 60f;
+    private void RequestProductData()
+    {
+        Debug.Log("RequestProductData");
+        if (!store.IsAvailable)
+            return;
+        store.Request(new [] { m_CurProductID });
+    }
 
-		if (GUI.Button(position, "Unlock game"))
-		{
-			store.Purchase(m_FullgameUnlockID);
-		}
+    private void PurchaseProduct()
+    {
+        Debug.Log("PurchaseProduct");
+        if (!store.IsAvailable)
+            return;
+        store.Purchase(m_CurProductID);
+    }
 
-		position.y += 60f;
-
-		if (GUI.Button(position, "Restore"))
-		{
-			store.Restore();
-		}
-	}
+    private void Restore()
+    {
+        Debug.Log("Restore");
+        if (!store.IsAvailable)
+            return;
+        store.Restore();
+    }
 
 	/// <summary>
 	/// Handles the request success event.
@@ -74,9 +86,9 @@ public class Example : MonoBehaviour, IStoreDelegate
 	{
 		switch (identifier)
 		{
-		case m_FullgameUnlockID:
+		//case m_CurProductID:
 			// Save fullgame value in player prefs.
-			break;
+			//break;
 		}
 	}
 	
