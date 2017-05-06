@@ -1,15 +1,43 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using System.Linq;
 
 namespace IOSStore
 {
 	/// <summary>
 	/// Bridge class for StoreKit and Unity.
 	/// </summary>
-	public sealed class StoreKit : MonoSingleton<StoreKit>, I_IOSStore
+	public sealed class StoreKit
 	{
+        private volatile static StoreKit m_Instance = null;
+        private static readonly object m_LockHelper = new object();
+
+        public static StoreKit Instance()
+        {
+            if(m_Instance == null)
+            {
+                lock(m_LockHelper)
+                {
+                    if(m_Instance == null)
+                    {
+                        m_Instance = new StoreKit();
+                    }
+                }
+            }
+            return m_Instance;
+        }
+
+        /// <summary>
+        /// initialze
+        /// </summary>
+        private StoreKit()
+        {
+#if UNITY_IOS && !UNITY_EDITOR
+			USKInit(gameObject.name);
+#endif
+        }
+
+
 #if UNITY_IOS && !UNITY_EDITOR
 		[DllImport("__Internal")]
 		private static extern void USKInit(string targetClass);
@@ -25,11 +53,11 @@ namespace IOSStore
 		private static extern void USKRestore();
 #endif
 
-		/// <summary>
-		/// Gets or sets the delegate.
-		/// </summary>
-		/// <value>The delegate.</value>
-		public IStoreDelegate Delegate { get; set; }
+        /// <summary>
+        /// Gets or sets the delegate.
+        /// </summary>
+        /// <value>The delegate.</value>
+        public IStoreDelegate Delegate { get; set; }
 
 		/// <summary>
 		/// Checks that store is available on the current device.
@@ -44,16 +72,6 @@ namespace IOSStore
 				return false;
 #endif
 			}
-		}
-
-		/// <summary>
-		/// Initialize StoreKit instance.
-		/// </summary>
-		private void Awake()
-		{
-#if UNITY_IOS && !UNITY_EDITOR
-			USKInit(gameObject.name);
-#endif
 		}
 
 		/// <summary>
