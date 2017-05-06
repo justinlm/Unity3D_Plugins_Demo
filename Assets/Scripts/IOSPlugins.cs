@@ -19,7 +19,7 @@ class IOSPlugins: IStoreDelegate
         {
             lock(m_LockHelper)
             {
-                if(m_LockHelper == null)
+                if(m_Instance == null)
                 {
                     m_Instance = new IOSPlugins();
                 }

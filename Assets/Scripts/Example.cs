@@ -28,6 +28,7 @@ public class Example : MonoBehaviour
 #if UNITY_IOS
         m_Panel_Android.SetActive(false);
         m_Panel_IOS.SetActive(true);
+
         m_PluginsManager.RequestProductData(new string [] { m_CurProductID });
 #else
         m_Panel_Android.SetActive(true);
@@ -43,6 +44,7 @@ public class Example : MonoBehaviour
 
         m_BtnTest1 = m_Panel_IOS.transform.Find("HelloIOSBtn").GetComponent<Button>();
         m_BtnTest1.onClick.AddListener(HelloIOS);
+
 #else
         m_BtnPurchaseProduct = m_Panel_Android.transform.Find("PurchaseProductBtn").GetComponent<Button>();
         m_BtnPurchaseProduct.onClick.AddListener(PurchaseProduct);
