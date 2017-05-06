@@ -12,7 +12,7 @@ class PluginsManager : MonoSingleton<PluginsManager>
 #if UNITY_IOS
         m_IOSPlugins = IOSPlugins.Instance();
 #else
-        m_AndroidPlugins = AndroidPlugins.Instance();
+        m_AndroidPlugins = AndroidPlugins.Instance;
 #endif
     }
 

@@ -2,27 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-class AndroidPlugins
+class AndroidPlugins : MonoSingleton<AndroidPlugins>
 {
-    private volatile static AndroidPlugins m_Instance = null;
-    private readonly static object m_LockHelper = new object();
-
+ 
     private AndroidJavaObject m_JavaObj = null;
-
-    public static AndroidPlugins Instance()
-    {
-        if(m_Instance == null)
-        {
-            lock(m_LockHelper)
-            {
-                if(m_Instance == null)
-                {
-                    m_Instance = new AndroidPlugins();
-                }
-            }
-        }
-        return m_Instance;
-    }
 
     private AndroidPlugins()
     {
@@ -32,21 +15,21 @@ class AndroidPlugins
 
     public void CallStaticJavaFunc()
     {
-        m_JavaObj.CallStatic("staicJavaFunc");
+        m_JavaObj.CallStatic("callStaticJavaFunc");
     }
 
     public void CallNormalJavaFunc()
     {
-        this.m_JavaObj.Call("normalJavaFunc");
+        this.m_JavaObj.Call("callNormalJavaFunc");
     }
 
     public void Purchase(string payCode)
     {
-        this.m_JavaObj.Call("Purchase", payCode);
+        this.m_JavaObj.Call("purchase", payCode);
     }
 
-    public void OnPurchaseResult(string result, string payCode)
+    public void OnPurchaseResult(string result)
     {
-        Debug.Log("result: " + result + " payCode:" + payCode);
+        Debug.Log("result: " + result);
     }
 }
