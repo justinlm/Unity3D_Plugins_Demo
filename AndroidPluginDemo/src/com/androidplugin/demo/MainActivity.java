@@ -46,8 +46,8 @@ public class MainActivity extends UnityPlayerActivity {
 		});
 		
 		//call back to unity
-		UnityPlayer.UnitySendMessage("AndroidObject", "PaySuccessAndroid",
-				"true");
+		UnityPlayer.UnitySendMessage("AndroidPlugins", "OnPurchaseResult",
+				"success");
 
 	}
 	
