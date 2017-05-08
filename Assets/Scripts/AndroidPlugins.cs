@@ -4,8 +4,9 @@ using UnityEngine;
 
 class AndroidPlugins : MonoSingleton<AndroidPlugins>
 {
-
+#if UNITY_ANDROID && !UNITY_EDITOR
     private AndroidJavaObject m_JavaObj = null;
+#endif
 
     private AndroidPlugins()
     {
