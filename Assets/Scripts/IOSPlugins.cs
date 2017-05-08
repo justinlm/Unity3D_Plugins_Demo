@@ -66,8 +66,20 @@ class IOSPlugins: IStoreDelegate
         StoreKit.Instance().Restore();
     }
 
+#if UNITY_IOS && !UNITY_EDITOR
+		[DllImport("__Internal")]
+		private static extern void _HelloIOS(string str);
+#endif
     public void HelloIOS()
     {
+#if UNITY_IOS && !UNITY_EDITOR
+        _HelloIOS("Hello ios");
+#endif
+    }
+
+    public void HelloIOSCallBack(string backMessage)
+    {
+        Debug.Log("backMessage :" + backMessage);
     }
 
     /// <summary>
