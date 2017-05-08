@@ -10,7 +10,7 @@ class PluginsManager : MonoSingleton<PluginsManager>
     private void Awake()
     {
 #if UNITY_IOS
-        m_IOSPlugins = IOSPlugins.Instance();
+        m_IOSPlugins = IOSPlugins.Instance;
 #else
         m_AndroidPlugins = AndroidPlugins.Instance;
 #endif

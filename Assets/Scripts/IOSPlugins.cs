@@ -2,36 +2,23 @@
 using System.Collections.Generic;
 using IOSStore;
 using UnityEngine;
+using System.Runtime.InteropServices;
 
-class IOSPlugins: IStoreDelegate
+class IOSPlugins: MonoSingleton<IOSPlugins>,IStoreDelegate
 {
-
-    private volatile static IOSPlugins m_Instance = null;
-    private static readonly object m_LockHelper = new object();
-
     private List<StoreProduct> m_RequestProductList;
 
-    private String[] m_ProductIDs; 
-
-    public static IOSPlugins Instance()
-    {
-        if(m_Instance == null)
-        {
-            lock(m_LockHelper)
-            {
-                if(m_Instance == null)
-                {
-                    m_Instance = new IOSPlugins();
-                }
-            }
-        }
-        return m_Instance;
-    }
+    private String[] m_ProductIDs;
 
     private IOSPlugins()
     {
+      
+    }
+
+    private void Awake()
+    {
         m_RequestProductList = new List<StoreProduct>();
-        StoreKit.Instance().Delegate = this;
+        StoreKit.Instance.Delegate = this;
     }
 
 
@@ -39,31 +26,31 @@ class IOSPlugins: IStoreDelegate
     {
         m_ProductIDs = productIDs;
 
-        if (!StoreKit.Instance().IsAvailable)
+        if (!StoreKit.Instance.IsAvailable)
             return;
-        StoreKit.Instance().Request(productIDs);
+        StoreKit.Instance.Request(productIDs);
     }
 
     public void PurchaseProduct(string productID)
     {
-        if (!StoreKit.Instance().IsAvailable)
+        if (!StoreKit.Instance.IsAvailable)
             return;
         if (m_RequestProductList.Count > 0)
         {
-            StoreKit.Instance().Purchase(productID);
+            StoreKit.Instance.Purchase(productID);
         }
         else
         {
-            StoreKit.Instance().Request(m_ProductIDs);
+            StoreKit.Instance.Request(m_ProductIDs);
             OnStoreTransactionFailed(productID);
         }
     }
 
     public void Restore()
     {
-        if (!StoreKit.Instance().IsAvailable)
+        if (!StoreKit.Instance.IsAvailable)
             return;
-        StoreKit.Instance().Restore();
+        StoreKit.Instance.Restore();
     }
 
 #if UNITY_IOS && !UNITY_EDITOR

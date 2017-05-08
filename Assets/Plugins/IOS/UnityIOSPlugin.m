@@ -23,7 +23,7 @@ extern "C"{
    
     void _HelloIOS(const char * string)
     {
-		[[UnityIOSPlugin sharedManager] showAlertMessage:@"" message:_CreateNSString(shareMessage)];
+		[[UnityIOSPlugin sharedManager] showAlertMessage:@"" message:_CreateNSString(string)];
 		
 		//回调unity函数
 		UnitySendMessage([@"IOSPlugins" UTF8String],[@"HelloIOSCallBack" UTF8String], [@"Hello Unity" UTF8String]);    
@@ -39,17 +39,17 @@ extern "C"{
 #pragma mark - LifeCycle
 +(instancetype)sharedManager {
     static dispatch_once_t onceToken;
-    static WXApiManager *instance;
+    static UnityIOSPlugin *instance;
     dispatch_once(&onceToken, ^{
-        instance = [[WXApiManager alloc] init];
+        instance = [[UnityIOSPlugin alloc] init];
     });
     return instance;
 }
 
-- (void)dealloc {
-    self.delegate = nil;
-    [super dealloc];
-}
+//- (void)dealloc {
+//    self.delegate = nil;
+//    [super dealloc];
+//}
 
 - (void)showAlertMessage:(NSString *) strTitle message:(NSString *) strMsg {
 
@@ -59,6 +59,6 @@ extern "C"{
                                           cancelButtonTitle:@"OK"
                                           otherButtonTitles:nil, nil];
     [alert show];
-    [alert release];
+    //[alert release];
 }
 @end
